@@ -43,19 +43,31 @@ const App: React.FC = () => {
 
       <ImageList images={images} onSelectImage={handleSelectImage} />
 
+      {/*  */}
       {selectedImage && (
+        <div>
           <div id="modal" className="fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center">
             <a className='fixed z-90 top-6 right-8 text-white text-5xl font-bold hover:cursor-pointer' onClick={() => {
               setSelectedImage(null)
             }}>&times;</a>
-            <img id="modal-img"
-             className="max-w-[800px] max-h-[600px] object-cover" alt={selectedImage.name} src={buildImgixUrl(selectedImage.url, {
-              w: 800,
-              h: 600,
-              fit: 'max',
-              auto: 'format,compress'
-             })}/>
+            <div>
+              <img id="modal-img"
+              className="max-w-[800px] max-h-[600px] object-cover" alt={selectedImage.name} src={buildImgixUrl(selectedImage.url, {
+                w: 800,
+                h: 600,
+                fit: 'max',
+                auto: 'format,compress'
+                })}/>
+                <div className="flex mt-1 justify-left">
+                  <button className="mr-2 text-5xl hover:cursor-pointer text-white">&#8693;</button>
+
+                  <button className="mt-2 text-5xl hover:cursor-pointer text-white transform rotate-90 ">
+                    &#8693;
+                  </button>
+                </div>
+            </div>
           </div>
+        </div>
         )}
     </div>
   );
