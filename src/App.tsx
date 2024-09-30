@@ -49,26 +49,14 @@ const App: React.FC = () => {
               setSelectedImage(null)
             }}>&times;</a>
             <img id="modal-img"
-             className="max-w-[800px] max-h-[600px] object-cover" alt={selectedImage.name} src={selectedImage.url}/>
+             className="max-w-[800px] max-h-[600px] object-cover" alt={selectedImage.name} src={buildImgixUrl(selectedImage.url, {
+              w: 800,
+              h: 600,
+              fit: 'max',
+              auto: 'format,compress'
+             })}/>
           </div>
         )}
-
-      {/* {selectedImage && (
-        <div className="mt-10 text-center">
-          <h2 className="text-xl text-gray-700">Selected Image:</h2>
-          <img
-            src={buildImgixUrl(selectedImage.url, {
-              w: 600,
-              h: 400,
-              fit: 'max',
-              auto: 'format,compress',
-            })}
-            alt={selectedImage.name}
-            className="block max-w-full h-auto rounded-lg shadow-lg mx-auto mt-5"
-          />
-          <p className="mt-3 text-lg text-gray-600">{selectedImage.name}</p>
-        </div>
-      )} */}
     </div>
   );
 };
