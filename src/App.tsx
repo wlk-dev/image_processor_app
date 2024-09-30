@@ -44,6 +44,16 @@ const App: React.FC = () => {
       <ImageList images={images} onSelectImage={handleSelectImage} />
 
       {selectedImage && (
+          <div id="modal" className="fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center">
+            <a className='fixed z-90 top-6 right-8 text-white text-5xl font-bold hover:cursor-pointer' onClick={() => {
+              setSelectedImage(null)
+            }}>&times;</a>
+            <img id="modal-img"
+             className="max-w-[800px] max-h-[600px] object-cover" alt={selectedImage.name} src={selectedImage.url}/>
+          </div>
+        )}
+
+      {/* {selectedImage && (
         <div className="mt-10 text-center">
           <h2 className="text-xl text-gray-700">Selected Image:</h2>
           <img
@@ -58,7 +68,7 @@ const App: React.FC = () => {
           />
           <p className="mt-3 text-lg text-gray-600">{selectedImage.name}</p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };
