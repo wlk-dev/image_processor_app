@@ -1,5 +1,5 @@
 export interface Image {
-    id?: string; // Optional if not provided by apiService.ts
+    id?: string; 
     url: string;
     name: string;
 }

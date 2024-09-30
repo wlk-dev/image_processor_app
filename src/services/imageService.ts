@@ -1,8 +1,8 @@
-import { Image } from "@/types/types";
+import { Image } from "../types/types";
 
 const API_ENDPOINT = 'https://us-central1-prueba-front-280718.cloudfunctions.net/challenge-fe';
 
-export const apiService = async (): Promise<Image[]> => {
+export const imageService = async (): Promise<Image[]> => {
     try {
         const response = await fetch(
             API_ENDPOINT
