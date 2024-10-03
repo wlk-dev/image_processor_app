@@ -20,9 +20,11 @@ export const ImageModal: React.FC<{images: Image[], params: ImageParams, index: 
                 <div className="flex mt-1 justify-left">
                   <button className="mr-2 text-5xl hover:cursor-pointer text-white" onClick={() => {
                     setLoading(true)
-                    {/* Can probably modularize this behavior somehow. */}
+                    {/* Can probably modularize this behavior somehow. And implement logic for continuity of operations. */}
                     if (flip === 'v') {
                         images[index].params.flip = undefined;
+                    } else if (flip === 'h') {
+                        images[index].params.flip = 'hv'
                     } else {
                         images[index].params.flip = 'v'
                     };
@@ -32,6 +34,8 @@ export const ImageModal: React.FC<{images: Image[], params: ImageParams, index: 
                       setLoading(true);
                       if (flip === 'h') {
                         images[index].params.flip = undefined;
+                      } else if (flip === 'v') {
+                        images[index].params.flip = 'hv';
                       } else {
                         images[index].params.flip = 'h'
                       }
