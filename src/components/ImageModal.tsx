@@ -15,6 +15,8 @@ export const ImageModal: React.FC<{images: Image[], params: ImageParams, index: 
 
     const options: AllowedValues[] = [1,2,3,4,5,6,7,8,90,180,270];
 
+    // TODO: Fix persistence issues with orient.
+    // TODO: This is still spaghetti.
     return (
         <>
             <div style={{display: loading ? "none": "block"}}>
