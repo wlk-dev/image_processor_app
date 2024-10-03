@@ -37,7 +37,9 @@ const App: React.FC = () => {
 
   const handleSelectImage = (image: Image, index: Index) => {
     setSelectedImage({image, index});
-    images[index].params = imgixParams;
+    if (!images[index].paramUrl) {
+      images[index].params = imgixParams;
+    }
     console.log('Selected Image:', image);
     console.log('Selected Key:', index)
     console.log('From Images:', images);
