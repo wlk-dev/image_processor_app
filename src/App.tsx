@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ImageList from './components/ImageList';
-import { Image } from './types/types'
+import { ImageModal } from './components/ImageModal';
+import { Image, Index, ImageParams } from './types/types'
 import { imageService } from './services/imageService';
-import { buildImgixUrl } from './utils/imgixUtils';
 
 interface FetchImagesProps {
   setImages: React.Dispatch<React.SetStateAction<Image[]>>;
@@ -21,18 +21,26 @@ const fetchImages = async ({ setImages, setError }: FetchImagesProps): Promise<v
 
 const App: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);
-  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{image: Image, index: Index} | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const imgixParams: ImageParams = {
+    w: 800,
+    h: 600,
+    fit: 'crop',
+    auto: 'format,compress',
+  };
   
 
   useEffect(() => {
     fetchImages({setImages, setError});
   }, []);
 
-  const handleSelectImage = (image: Image) => {
-    setSelectedImage(image);
+  const handleSelectImage = (image: Image, index: Index) => {
+    setSelectedImage({image, index});
+    images[index].params = imgixParams;
     console.log('Selected Image:', image);
-    // TODO: open modal for image operations
+    console.log('Selected Key:', index)
+    console.log('From Images:', images);
   };
 
   return (
@@ -43,7 +51,6 @@ const App: React.FC = () => {
 
       <ImageList images={images} onSelectImage={handleSelectImage} />
 
-      {/*  */}
       {selectedImage && (
         <div>
           <div id="modal" className="fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center">
@@ -51,20 +58,7 @@ const App: React.FC = () => {
               setSelectedImage(null)
             }}>&times;</a>
             <div>
-              <img id="modal-img"
-              className="max-w-[800px] max-h-[600px] object-cover" alt={selectedImage.name} src={buildImgixUrl(selectedImage.url, {
-                w: 800,
-                h: 600,
-                fit: 'max',
-                auto: 'format,compress'
-                })}/>
-                <div className="flex mt-1 justify-left">
-                  <button className="mr-2 text-5xl hover:cursor-pointer text-white">&#8693;</button>
-
-                  <button className="mt-2 text-5xl hover:cursor-pointer text-white transform rotate-90 ">
-                    &#8693;
-                  </button>
-                </div>
+              <ImageModal images={images} index={selectedImage.index} params={imgixParams}/>
             </div>
           </div>
         </div>

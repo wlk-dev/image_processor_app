@@ -1,15 +1,21 @@
+import { ImageParams, Image } from "../types/types";
+
 export const buildImgixUrl = (
-    baseUrl: string,
-    params?: Record<string, string | number | boolean>
+    image: Image,
+    params: ImageParams
 ): string => {
-    if (!params) {
-        return baseUrl;
+    if (!image.params && !params) {
+        return image.url;
+    } else {
+        image.params = params
     }
 
-    const url = new URL(baseUrl);
-    Object.entries(params).forEach(([key, value]) => {
+    const url = new URL(image.url);
+    Object.entries(image.params).forEach(([key, value]) => {
         url.searchParams.append(key, String(value));
     });
 
-    return url.toString();
+    image.paramUrl = url.toString();
+
+    return image.paramUrl;
 }
