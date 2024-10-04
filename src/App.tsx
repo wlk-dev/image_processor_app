@@ -1,49 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import ImageList from './components/ImageList';
-import { ImageModal } from './components/ImageModal';
-import { Image, Index, ImageParams } from './types/types'
-import { imageService } from './services/imageService';
-
-interface FetchImagesProps {
-  setImages: React.Dispatch<React.SetStateAction<Image[]>>;
-  setError: React.Dispatch<React.SetStateAction<string | null>>;
-}
-
-const fetchImages = async ({ setImages, setError }: FetchImagesProps): Promise<void> => {
-  try {
-    const data = await imageService();
-    setImages(data);
-  } catch (err) {
-    console.error('Error fetching images.', err);
-    setError('Failed to fetch images. Please try again later.');
-  }
-};
+import ImageModal from './components/ImageModal';
+import { ImageContext } from './contexts/ImageContext';
 
 const App: React.FC = () => {
-  const [images, setImages] = useState<Image[]>([]);
-  const [selectedImage, setSelectedImage] = useState<{image: Image, index: Index} | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const imgixParams: ImageParams = {
-    w: 800,
-    h: 600,
-    fit: 'crop',
-    auto: 'format,compress',
-  };
-  
+  const imageContext = useContext(ImageContext);
 
-  useEffect(() => {
-    fetchImages({setImages, setError});
-  }, []);
+  if (!imageContext) {
+    return <div>Loading...</div>; // Or a fallback UI
+  }
 
-  const handleSelectImage = (image: Image, index: Index) => {
-    setSelectedImage({image, index});
-    if (!images[index].paramUrl) {
-      images[index].params = imgixParams;
-    }
-    console.log('Selected Image:', image);
-    console.log('Selected Key:', index)
-    console.log('From Images:', images);
-  };
+  const { images, selectedImageIndex, closeModal, error } = imageContext;
 
   return (
     <div className="p-5 max-w-screen-xl mx-auto font-sans">
@@ -51,20 +18,26 @@ const App: React.FC = () => {
 
       {error && <p className="text-red-500 text-center mt-2">{error}</p>}
 
-      <ImageList images={images} onSelectImage={handleSelectImage} />
+      <ImageList />
 
-      {selectedImage && (
-        <div>
-          <div id="modal" className="fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center">
-            <a className='fixed z-90 top-6 right-8 text-white text-5xl font-bold hover:cursor-pointer' onClick={() => {
-              setSelectedImage(null)
-            }}>&times;</a>
-            <div>
-              <ImageModal images={images} index={selectedImage.index} params={imgixParams}/>
-            </div>
+      {selectedImageIndex !== null && images[selectedImageIndex] && (
+        <div id="modal" className="fixed top-0 left-0 z-80 w-screen h-screen bg-black/70 flex justify-center items-center">
+          <button
+            className='fixed z-90 top-6 right-8 text-white text-5xl font-bold hover:cursor-pointer'
+            onClick={closeModal}
+            aria-label="Close Modal"
+          >
+            &times;
+          </button>
+          <div>
+            <ImageModal
+              image={images[selectedImageIndex]}
+              index={selectedImageIndex}
+              options={imageContext.options}
+            />
           </div>
         </div>
-        )}
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, {createContext, useState, useEffect, ReactNode, useMemo, useCallback, Children} from 'react';
+import React, {createContext, useState, useEffect, ReactNode, useMemo, useCallback} from 'react';
 import {Image, ImageParameters, AllowedValues, Index, FetchImageProps} from '../types/types';
 import { imageService } from '../services/imageService';
 import { buildImgixUrl } from '../utils/imgixUtils';
